@@ -1,6 +1,7 @@
 package com.eros.framework.extend.module;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.eros.framework.constant.Constant;
 import com.eros.framework.constant.WXEventCenter;
 import com.eros.framework.manager.StorageManager;
@@ -120,11 +121,26 @@ public class RouterModule extends WXModule {
 
     @JSMethod
     public void setHomePage(String params) {
+//        WeexEventBean weexEventBean = new WeexEventBean();
+//        weexEventBean.setKey(WXEventCenter.EVENT_SET_HOMEPAGE);
+//        weexEventBean.setContext(mWXSDKInstance.getContext());
+//        weexEventBean.setJsParams(params);
+//        ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post(weexEventBean);
+//
+//        JSONObject jsonObject = new JSONObject(params);
+        JSONObject jsonObject = JSONObject.parseObject(params);
+//        JSONObject jsonobject = JSONObject.fromObject(params);
+        boolean refresh = (boolean) jsonObject.get("refresh");
+        String urlpath = (String) jsonObject.get("path");
+
         WeexEventBean weexEventBean = new WeexEventBean();
         weexEventBean.setKey(WXEventCenter.EVENT_SET_HOMEPAGE);
         weexEventBean.setContext(mWXSDKInstance.getContext());
-        weexEventBean.setJsParams(params);
-        ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post(weexEventBean);
+        weexEventBean.setJsParams(urlpath);
+        if(refresh){
+            ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post(weexEventBean);
+        }
+
     }
 
     @JSMethod(uiThread = true)
