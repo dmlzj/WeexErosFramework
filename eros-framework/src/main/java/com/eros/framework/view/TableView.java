@@ -17,13 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.eros.framework.BMWXEnvironment;
 import com.eros.framework.R;
 import com.eros.framework.activity.AbstractWeexActivity;
 import com.eros.framework.adapter.DefaultNavigationAdapter;
+import com.eros.framework.constant.Constant;
 import com.eros.framework.constant.WXEventCenter;
-import com.eros.framework.event.TabbarEvent;
+
 import com.eros.framework.fragment.MainWeexFragment;
 import com.eros.framework.manager.ManagerFactory;
+import com.eros.framework.manager.StorageManager;
+import com.eros.framework.manager.impl.ParseManager;
 import com.eros.framework.manager.impl.dispatcher.DispatchEventManager;
 import com.eros.framework.model.NatigatorModel;
 import com.eros.framework.model.NavigatorModel;
@@ -112,7 +117,16 @@ public class TableView extends RelativeLayout implements ViewPager.OnPageChangeL
      * @param tabBar
      */
     private void initItem(PlatformConfigBean.TabBar tabBar) {
-        List<PlatformConfigBean.TabItem> items = tabBar.getList();
+        StorageManager storageManager = ManagerFactory.getManagerService(StorageManager.class);
+        String bar = storageManager.getData(activity, Constant.SP.SP_TABBAR_JSON);
+        if (!TextUtils.isEmpty(bar)) {
+            PlatformConfigBean.TabBar bean = ManagerFactory.getManagerService(ParseManager.class).parseObject
+                    (bar, PlatformConfigBean.TabBar.class);
+            BMWXEnvironment.mPlatformConfig.setTabBar(bean);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(bar);
+        List<PlatformConfigBean.TabItem> items = JSONObject.parseArray(jsonObject.get("list").toString(), PlatformConfigBean.TabItem.class);
+//        List<PlatformConfigBean.TabItem> items = tabBar.getList();
         // 循环add  tab Item
         for (int i = 0; i < items.size(); i++) {
             PlatformConfigBean.TabItem item = items.get(i);
