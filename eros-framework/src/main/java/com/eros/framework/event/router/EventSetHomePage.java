@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.eros.framework.BMWXEnvironment;
 import com.eros.framework.adapter.router.DefaultRouterAdapter;
 import com.eros.framework.constant.Constant;
@@ -28,15 +29,21 @@ public class EventSetHomePage extends EventGate{
 
     @SuppressWarnings("WrongConstant")
     public void setHomePage(Context context, String params) {
+        JSONObject jsonObject = JSONObject.parseObject(params);
+//        JSONObject jsonobject = JSONObject.fromObject(params);
+        boolean refresh = (boolean) jsonObject.get("refresh");
+        String urlpath = (String) jsonObject.get("path");
         StorageManager storageManager = ManagerFactory.getManagerService(StorageManager.class);
-        storageManager.setData(context, Constant.SP.SP_HOMEPAGE_URL, params);
+        storageManager.setData(context, Constant.SP.SP_HOMEPAGE_URL, urlpath);
 
+        if (refresh) {
+            String homePage = BMWXEnvironment.mPlatformConfig.getPage().getHomePage(context);
+            RouterModel router = new RouterModel(homePage, Constant.ACTIVITIES_ANIMATION
+                    .ANIMATION_PUSH, null, null, false, null);
+            Intent intent = performStartActivity(router,DefaultRouterAdapter.getInstance().getPageCategory(context));
+            context.startActivity(intent);
+        }
 
-        String homePage = BMWXEnvironment.mPlatformConfig.getPage().getHomePage(context);
-        RouterModel router = new RouterModel(homePage, Constant.ACTIVITIES_ANIMATION
-                .ANIMATION_PUSH, null, null, false, null);
-        Intent intent = performStartActivity(router,DefaultRouterAdapter.getInstance().getPageCategory(context));
-        context.startActivity(intent);
 //        PendingIntent restartIntent = PendingIntent.getActivity(
 //                context.getApplicationContext(), 0, intent, Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

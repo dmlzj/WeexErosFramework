@@ -40,7 +40,7 @@ public class DefaultRouterAdapter {
         if(TextUtils.isEmpty(mApplicationId)){
             mApplicationId=context.getApplicationInfo().packageName;
         }
-        return mApplicationId + ".categoty.page";
+        return mApplicationId + ".category.page";
     }
 
     public String getWebViewCategory(Context context){
