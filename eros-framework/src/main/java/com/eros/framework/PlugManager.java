@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class PlugManager {
     public static void initPlug() {
         pluginInit("com.plugamap.manager.GeoManager");
-        pluginInit("com.eros.erosplugingt.manager.PushManager");
+        pluginInit("com.nongchanpinappv1.erospluginjpush.manager.PushManager");
     }
 
     private static void pluginInit(String clazzName) {

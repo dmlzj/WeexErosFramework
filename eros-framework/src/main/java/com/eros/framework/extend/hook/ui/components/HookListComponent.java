@@ -115,5 +115,11 @@ public class HookListComponent extends WXListComponent {
             mload.onLoadComplete();
         }
     }
+    @JSMethod
+    public void resetNoMoreData() {
+
+    }
+    @JSMethod
+    public void noticeNoMoreData() {}
 
 }
