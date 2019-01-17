@@ -24,8 +24,13 @@ import com.eros.framework.model.TabbarBadgeModule;
 import com.eros.framework.model.WeexEventBean;
 import com.eros.framework.utils.SharePreferenceUtil;
 import com.eros.framework.view.TableView;
+import com.qiyukf.unicorn.api.ConsultSource;
+import com.qiyukf.unicorn.api.ProductDetail;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
+import com.qiyukf.unicorn.api.Unicorn;
+import com.qiyukf.nimlib.sdk.NimIntent;
+//import com.qiyukf.unicorn.api.msg.
 
 public class MainActivity extends AbstractWeexActivity {
     private FrameLayout layout_container;
@@ -50,8 +55,35 @@ public class MainActivity extends AbstractWeexActivity {
         initReloadReceiver();
 
         statusBarHidden(BMWXApplication.getWXApplication().IS_FULL_SCREEN);
+        //七鱼客服
+        parseIntent();
+        ((BMWXApplication)getApplication()).setServiceEntranceActivity(getClass());
     }
-
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        parseIntent();
+    }
+    public static void consultService(final Context context, String uri, String title, ProductDetail productDetail) {
+        // 启动聊天界面
+        ConsultSource source = new ConsultSource(uri, title, null);
+        source.productDetail = productDetail;
+        Unicorn.openServiceActivity(context, staffName(), source);
+    }
+    private static String staffName() {
+        return "客服";
+    }
+    /**
+     * 七鱼需要
+     */
+    private void parseIntent() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+            consultService(this, null, null, null);
+            // 最好将intent清掉，以免从堆栈恢复时又打开客服窗口
+            setIntent(new Intent());
+        }
+    }
 
     private void initReloadReceiver() {
         mReloadReceiver = new BroadcastReceiver() {
