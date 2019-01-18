@@ -80,7 +80,7 @@ public class StatusBarManager {
                             .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 }
                 layoutParams.topMargin = 0;
-                translucentStatusBar(activity, true);
+                translucentStatusBar(activity, false);
                 // 字体设置为黑色
                 StatusBarCompat.changeToLightStatusBar(activity);
             } else {
