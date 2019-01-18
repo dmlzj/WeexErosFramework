@@ -1,7 +1,10 @@
 package com.eros.framework.extend.module;
 
 
+import android.app.Activity;
+
 import com.alibaba.fastjson.JSONObject;
+import com.eros.framework.adapter.router.RouterTracker;
 import com.eros.framework.constant.Constant;
 import com.eros.framework.constant.WXEventCenter;
 import com.eros.framework.manager.StorageManager;
@@ -14,6 +17,7 @@ import com.eros.framework.manager.impl.dispatcher.DispatchEventManager;
 import com.eros.framework.constant.WXConstant;
 
 import java.util.ArrayList;
+import qiu.niorgai.StatusBarCompat;
 
 /**
  * Created by Carry on 17/1/11.
@@ -142,7 +146,20 @@ public class RouterModule extends WXModule {
 //        }
 
     }
-
+    @JSMethod(uiThread = true)
+    /**
+     * @params flag:true设置字体等为黑色，false：设置为白色
+     * @params hide:是否隐藏半透明灰色statusBar
+     */
+    public void setStatusBar(boolean flag, boolean hide){
+        Activity activity = RouterTracker.peekActivity();
+        StatusBarCompat.translucentStatusBar(activity, hide);
+        if (flag) {
+            StatusBarCompat.changeToLightStatusBar(activity);
+        } else {
+            StatusBarCompat.cancelLightStatusBar(activity);
+        }
+    }
     @JSMethod(uiThread = true)
     public void nav(String params) {
         WeexEventBean weexEventBean = new WeexEventBean();

@@ -54,10 +54,8 @@ dependencies {
     compile 'com.alibaba.android:bindingx-core:1.0.1'
     compile 'com.alibaba.android:bindingx_weex_plugin:1.0.2'
     compile 'org.weex.plugin:plugin-loader:1.0.0'
-    compile ('com.github.niorgai:StatusBarCompat:2.1.4', {
-        exclude group: 'com.android.support'
-    })
     compile project(':nexus')
+    compile project(':StatusBarCompat')
     compile 'com.qiyukf.unicorn:unicorn:4.8.0'
     compile 'com.facebook.fresco:fresco:0.9.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'

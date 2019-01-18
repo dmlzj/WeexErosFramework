@@ -80,7 +80,9 @@ public class StatusBarManager {
                             .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 }
                 layoutParams.topMargin = 0;
-                translucentStatusBar(activity);
+                translucentStatusBar(activity, true);
+                // 字体设置为黑色
+                StatusBarCompat.changeToLightStatusBar(activity);
             } else {
                 //不可透明 向上平移状态栏高度
                 View root = activity.getRootView();
@@ -89,8 +91,8 @@ public class StatusBarManager {
         }
     }
 
-    private static void translucentStatusBar(AbstractWeexActivity activity) {
-        StatusBarCompat.translucentStatusBar(activity);
+    private static void translucentStatusBar(AbstractWeexActivity activity, boolean hideStatusBarBackground) {
+        StatusBarCompat.translucentStatusBar(activity, hideStatusBarBackground);
     }
 
 
