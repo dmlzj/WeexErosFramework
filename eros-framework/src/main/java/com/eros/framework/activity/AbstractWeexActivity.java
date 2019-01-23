@@ -916,9 +916,9 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
 
 
     protected boolean isHomePage() {
-        String homePage = BMWXEnvironment.mPlatformConfig.getPage().getHomePage(this);
-        homePage = BMWXEnvironment.mPlatformConfig.getUrl().getJsServer() +
-                "/dist/js" + homePage;
+//        String homePage = BMWXEnvironment.mPlatformConfig.getPage().getHomePage(this);
+        String homePage = BMWXEnvironment.mPlatformConfig.getUrl().getJsServer() +
+                "/dist/js" + "tabBar";
         return homePage.equals(this.mPageUrl);
     }
 
