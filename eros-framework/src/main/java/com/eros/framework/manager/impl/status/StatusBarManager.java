@@ -62,6 +62,7 @@ public class StatusBarManager {
                 //support
                 setStatusBarColor(activity, BaseCommonUtil.getHexColor(defaultColor), 0, activity
                         .getRootView());
+                StatusBarCompat.changeToLightStatusBar(activity);
                 if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
                     View root = activity.getRootView();
                     setOffset(activity, root, true);
@@ -80,7 +81,7 @@ public class StatusBarManager {
                             .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 }
                 layoutParams.topMargin = 0;
-                translucentStatusBar(activity, false);
+                translucentStatusBar(activity, true);
                 // 字体设置为黑色
                 StatusBarCompat.changeToLightStatusBar(activity);
             } else {
