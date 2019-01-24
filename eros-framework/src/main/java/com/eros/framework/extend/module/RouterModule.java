@@ -161,6 +161,11 @@ public class RouterModule extends WXModule {
         }
     }
     @JSMethod(uiThread = true)
+    public void setFullScreen() {
+        Activity activity = RouterTracker.peekActivity();
+        StatusBarCompat.translucentStatusBar(activity);
+    }
+    @JSMethod(uiThread = true)
     public void nav(String params) {
         WeexEventBean weexEventBean = new WeexEventBean();
         weexEventBean.setKey(WXEventCenter.EVENT_NAV);

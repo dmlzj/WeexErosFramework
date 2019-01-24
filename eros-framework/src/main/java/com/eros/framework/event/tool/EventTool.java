@@ -1,6 +1,8 @@
 package com.eros.framework.event.tool;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.eros.framework.constant.WXEventCenter;
@@ -28,6 +30,8 @@ public class EventTool extends EventGate {
             getCid(context, weexEventBean.getJscallback());
         } else if (WXEventCenter.EVENT_COPYSTRING.equals(type)) {
             copyString(context, weexEventBean.getJsParams(), weexEventBean.getJscallback());
+        } else if (WXEventCenter.EVENT_OPENAPP.equals(type)) {
+            openApp(context, weexEventBean.getJsParams(), weexEventBean.getJscallback());
         }
     }
 
@@ -50,7 +54,11 @@ public class EventTool extends EventGate {
         }
 
     }
-
+    public void openApp(Context context, String params, JSCallback callback) {
+        Intent indent = new Intent(Intent.ACTION_VIEW, Uri.parse(params));
+        context.startActivity(indent);
+        JsPoster.postSuccess(null, "", callback);
+    }
     public void copyString(Context context, String params, JSCallback callback) {
         BaseCommonUtil.copyString(context, params);
         JsPoster.postSuccess(null, "复制成功", callback);

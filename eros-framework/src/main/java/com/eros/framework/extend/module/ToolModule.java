@@ -23,6 +23,15 @@ import com.eros.framework.constant.WXConstant;
  * Js交互键盘退出
  */
 public class ToolModule extends WXModule {
+    @JSMethod
+    public void openApp(String params, JSCallback callback) {
+        WeexEventBean weexEventBean = new WeexEventBean();
+        weexEventBean.setKey(WXEventCenter.EVENT_OPENAPP);
+        weexEventBean.setContext(mWXSDKInstance.getContext());
+        weexEventBean.setJscallback(callback);
+        weexEventBean.setJsParams(params);
+        ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post(weexEventBean);
+    }
 
     @JSMethod
     public void resignKeyboard(JSCallback callback) {
