@@ -62,21 +62,25 @@ public class VideoView extends DemoQSVideoView {
 
     @Override
     public void enterWindowFullscreen() {
-        if (currentMode == MODE_WINDOW_NORMAL) {
-            super.enterWindowFullscreen();
-            Util.SET_LANDSCAPE(instace.getContext());
-            ViewGroup vp = (ViewGroup) videoView.getParent();
-            if (vp != null) {
-                vp.removeView(videoView);
-            }
-            ViewGroup decorView = (ViewGroup) (Util.scanForActivity(instace.getContext())).getWindow().getDecorView();
-            decorView.addView(videoView, new FrameLayout.LayoutParams(-1, -1));
-        }
+//        if (currentMode == MODE_WINDOW_NORMAL) {
+//            super.enterWindowFullscreen();
+//            Util.SET_LANDSCAPE(instace.getContext());
+//            ViewGroup vp = (ViewGroup) videoView.getParent();
+//            if (vp != null) {
+//                vp.removeView(videoView);
+//            }
+//            ViewGroup decorView = (ViewGroup) (Util.scanForActivity(instace.getContext())).getWindow().getDecorView();
+//            decorView.addView(videoView, new FrameLayout.LayoutParams(-1, -1));
+//        }
     }
 
     @Override
     public void quitWindowFullscreen() {
-        super.quitWindowFullscreen();
-        Util.SET_PORTRAIT(instace.getContext());
+//        super.quitWindowFullscreen();
+//        Util.SET_PORTRAIT(instace.getContext());
+//        ViewGroup vp = (ViewGroup) videoView.getParent();
+//        if (vp != null)
+//            vp.removeView(videoView);
+//        addView(videoView, new LayoutParams(-1, -1));
     }
 }
