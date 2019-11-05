@@ -2,20 +2,23 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.aa453509345'
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 26
+//    buildToolsVersion "26.0.2"
 
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
     }
-
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -30,7 +33,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
+//    implementation 'com.android.support:appcompat-v7:28.0.0'
+    compile "com.android.support:appcompat-v7:26.0.0"
+
     testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -59,6 +64,20 @@ dependencies {
     compile 'com.qiyukf.unicorn:unicorn:4.8.0'
     compile 'com.facebook.fresco:fresco:0.9.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile 'cn.jzvd:jiaozivideoplayer:7.0.5'
+    compile 'com.github.tohodog:QSVideoPlayer:2.2.8'
+
+
+    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
+
+
+    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.8'
+    compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
+    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
+    compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
+
+    compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'
 
 
 //    debugImplementation "com.squareup.leakcanary:leakcanary-android:1.5.4"
