@@ -1,10 +1,12 @@
 package com.eros.framework.extend.comoponents;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.eros.framework.extend.comoponents.view.VideoView;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
@@ -35,13 +37,13 @@ public class SYVideo extends WXVContainer<VideoView> {
         mVideoView.instace = getInstance();
         return mVideoView;
     }
-//    @WXComponentProp(name = "img")
-//    public void setImg(String src) {
+    @WXComponentProp(name = "img")
+    public void setImg(String src) {
 //        src = eeuiPage.rewriteUrl(getInstance(), src);
-//        if (getHostView() != null) {
-//            Glide.with((Activity) getContext()).load(src).into(getHostView().getCoverImageView());
-//        }
-//    }
+        if (getHostView() != null) {
+            Glide.with((Activity) getContext()).load(src).into(getHostView().getCoverImageView());
+        }
+    }
 
     @WXComponentProp(name = "liveMode")
     public void setLiveMode(boolean live) {
