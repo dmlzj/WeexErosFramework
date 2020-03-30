@@ -92,7 +92,7 @@ public class BMWXApplication extends Application {
      *
      * @return 进程名
      */
-    private static String getProcessName() {
+    public static String getProcessName() {
         BufferedReader reader = null;
         try {
             File file = new File("/proc/" + android.os.Process.myPid() + "/" + "cmdline");
