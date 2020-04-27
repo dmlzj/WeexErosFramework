@@ -57,9 +57,6 @@ public class MainActivity extends AbstractWeexActivity {
 
         super.onCreate(savedInstanceState);
 
-
-        if (!"true".equals(ManagerFactory.getManagerService(StorageManager.class).getData(this,"isload"))) {
-
             setContentView(R.layout.activity_main);
 //        AndroidBug5497Workaround.assistActivity(this);
             routerModel = (RouterModel) getIntent().getSerializableExtra(Constant.ROUTERPARAMS);
@@ -78,9 +75,6 @@ public class MainActivity extends AbstractWeexActivity {
             parseIntent();
             ((BMWXApplication) getApplication()).setServiceEntranceActivity(getClass());
 
-            ArrayList<Boolean> b = new ArrayList ();
-            ManagerFactory.getManagerService(StorageManager.class).setData(this,"isload","true");
-        }
     }
     @Override
     protected void onNewIntent(Intent intent) {

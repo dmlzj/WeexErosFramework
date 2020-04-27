@@ -531,17 +531,29 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
 
 
         if (this.callbacks!=null && this.callbacks.size()>0) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
 
-            BaseEventBean eventBean = new BaseEventBean();
-            eventBean.context = this;
-            eventBean.type = WXEventCenter.EVENT_STARTAPP;
-            eventBean.clazzName = "com.eros.framework.event.GlobalEvent";
+                        Thread.sleep(1000);
+
+                        BaseEventBean eventBean = new BaseEventBean();
+                        eventBean.context = AbstractWeexActivity.this;
+                        eventBean.type = WXEventCenter.EVENT_STARTAPP;
+                        eventBean.clazzName = "com.eros.framework.event.GlobalEvent";
 //        bean.trigger = false;
-            ParseManager param = ManagerFactory.getManagerService(ParseManager.class);
-            String json = param.toJsonString(this.callbacks);
-            eventBean.param = json;
-            ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post
-                    (eventBean);
+                        ParseManager param = ManagerFactory.getManagerService(ParseManager.class);
+                        String json = param.toJsonString(AbstractWeexActivity.this.callbacks);
+                        eventBean.param = json;
+                        ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post
+                                (eventBean);
+                        AbstractWeexActivity.this.callbacks = null;
+                    }catch (Exception e){
+
+                    }
+                }
+            }).start();
         }
     }
 
