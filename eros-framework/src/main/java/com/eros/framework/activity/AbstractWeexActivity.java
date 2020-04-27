@@ -320,21 +320,24 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
         Uri pageUri = data.getData();
         if (pageUri == null) return;
 
-        String url = pageUri.getPath();
-        if (pageUri.getScheme().startsWith("oneone") && pageUri.getQueryParameterNames().size()>0){
-            callbacks = new HashMap<>();
-           Iterator<String> n= pageUri.getQueryParameterNames().iterator();
+//        String url = pageUri.getPath();
+//        if (pageUri.getScheme().startsWith("oneone") && pageUri.getQueryParameterNames().size()>0){
+//            callbacks = new HashMap<>();
+//           Iterator<String> n= pageUri.getQueryParameterNames().iterator();
+//
+//           while (n.hasNext()) {
+//               String name = n.next();
+//               callbacks.put(name, pageUri.getQueryParameter(name));
+//           }
+//        }
 
-           while (n.hasNext()) {
-               String name = n.next();
-               callbacks.put(name, pageUri.getQueryParameter(name));
-           }
-        }
-
-        setPageUrl(url);
+        setPageUrl(pageUri.getPath());
     }
 
     public void setRouterParam(RouterModel param) {
+        ParseManager pm = ManagerFactory.getManagerService(ParseManager.class);
+        String json = pm.toJsonString(param);
+        Log.i("setRouterParam:",json);
         this.mRouterParam = param;
     }
 
@@ -553,7 +556,7 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
 
                     }
                 }
-            }).start();
+            });
         }
     }
 

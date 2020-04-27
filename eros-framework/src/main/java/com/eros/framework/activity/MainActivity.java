@@ -36,6 +36,8 @@ import com.qiyukf.unicorn.api.Unicorn;
 import com.qiyukf.nimlib.sdk.NimIntent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import bolts.Bolts;
 //import com.qiyukf.unicorn.api.msg.
@@ -54,6 +56,22 @@ public class MainActivity extends AbstractWeexActivity {
 //        if (url.startsWith("oneone2846")){
 //         getIntent().setData(Uri.parse(BMWXEnvironment.mPlatformConfig.getUrl().getJsServer()+"/dist/js/pages/auth/start.js"));
 //        }
+
+        Intent intent = getIntent();
+        Uri pageUri = intent.getData();
+        if (pageUri.getScheme().startsWith(Constant.SCHEME) && pageUri.getQueryParameterNames().size()>0){
+           HashMap<String,String> params = new HashMap<>();
+           Iterator<String> n= pageUri.getQueryParameterNames().iterator();
+
+           while (n.hasNext()) {
+               String name = n.next();
+               params.put(name, pageUri.getQueryParameter(name));
+           }
+
+           intent.putExtra(Constant.ROUTERPARAMS,new RouterModel(pageUri.getPath(),"PUSH",params,"",false,"Default",true));
+        }
+
+        setIntent(intent);
 
         super.onCreate(savedInstanceState);
 
