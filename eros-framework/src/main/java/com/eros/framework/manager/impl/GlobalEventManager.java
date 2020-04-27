@@ -1,5 +1,7 @@
 package com.eros.framework.manager.impl;
 
+import android.util.Log;
+
 import com.eros.framework.manager.Manager;
 import com.taobao.weex.WXSDKInstance;
 
@@ -59,6 +61,14 @@ public class GlobalEventManager extends Manager {
     public static void pushMessage(WXSDKInstance instance, Map<String, Object> map) {
         if (instance != null) {
             instance.fireGlobalEventCallback("pushMessage", map);
+        }
+
+    }
+
+    public static void startApp(WXSDKInstance instance, Map<String, Object> map) {
+        Log.i("startAPP",map.toString());
+        if (instance != null) {
+            instance.fireGlobalEventCallback("startApp", map);
         }
 
     }

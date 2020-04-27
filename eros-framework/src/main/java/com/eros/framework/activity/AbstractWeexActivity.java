@@ -8,9 +8,11 @@ import com.eros.framework.constant.Constant;
 import com.eros.framework.constant.WXConstant;
 import com.eros.framework.constant.WXEventCenter;
 import com.eros.framework.manager.ManagerFactory;
+import com.eros.framework.manager.impl.ParseManager;
 import com.eros.framework.manager.impl.PermissionManager;
 import com.eros.framework.manager.impl.dispatcher.DispatchEventManager;
 import com.eros.framework.model.AxiosResultBean;
+import com.eros.framework.model.BaseEventBean;
 import com.eros.framework.model.UploadResultBean;
 import com.eros.framework.model.WeexEventBean;
 import com.eros.framework.utils.DebugableUtil;
@@ -87,8 +89,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -125,6 +129,9 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
     protected WXAnalyzerDelegate mWxAnalyzerDelegate;
 
     private boolean isStatusBarHidden = false;
+
+
+    private HashMap<String,String> callbacks ;
 
     @Override
     public boolean handleMessage(Message msg) {
@@ -312,7 +319,19 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
     protected void initUrl(Intent data) {
         Uri pageUri = data.getData();
         if (pageUri == null) return;
-        setPageUrl(pageUri.toString());
+
+        String url = pageUri.getPath();
+        if (pageUri.getScheme().startsWith("oneone") && pageUri.getQueryParameterNames().size()>0){
+            callbacks = new HashMap<>();
+           Iterator<String> n= pageUri.getQueryParameterNames().iterator();
+
+           while (n.hasNext()) {
+               String name = n.next();
+               callbacks.put(name, pageUri.getQueryParameter(name));
+           }
+        }
+
+        setPageUrl(url);
     }
 
     public void setRouterParam(RouterModel param) {
@@ -399,6 +418,7 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
     }
 
     public void setPageUrl(String url) {
+        Log.i("setPageUrl",url);
         this.mPageUrl = url;
     }
 
@@ -507,6 +527,22 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
         ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post
                 (new Intent(Constant.Action
                         .ACTION_AUTHLOGIN_CANCEL));
+
+
+
+        if (this.callbacks!=null && this.callbacks.size()>0) {
+
+            BaseEventBean eventBean = new BaseEventBean();
+            eventBean.context = this;
+            eventBean.type = WXEventCenter.EVENT_STARTAPP;
+            eventBean.clazzName = "com.eros.framework.event.GlobalEvent";
+//        bean.trigger = false;
+            ParseManager param = ManagerFactory.getManagerService(ParseManager.class);
+            String json = param.toJsonString(this.callbacks);
+            eventBean.param = json;
+            ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post
+                    (eventBean);
+        }
     }
 
     @Override

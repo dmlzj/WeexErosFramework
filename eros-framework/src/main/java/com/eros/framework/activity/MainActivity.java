@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -18,6 +20,8 @@ import com.eros.framework.BMWXEnvironment;
 import com.eros.framework.R;
 import com.eros.framework.constant.Constant;
 import com.eros.framework.event.TabbarEvent;
+import com.eros.framework.manager.ManagerFactory;
+import com.eros.framework.manager.StorageManager;
 import com.eros.framework.manager.impl.GlobalEventManager;
 import com.eros.framework.model.RouterModel;
 import com.eros.framework.model.TabbarBadgeModule;
@@ -30,6 +34,10 @@ import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.qiyukf.unicorn.api.Unicorn;
 import com.qiyukf.nimlib.sdk.NimIntent;
+
+import java.util.ArrayList;
+
+import bolts.Bolts;
 //import com.qiyukf.unicorn.api.msg.
 
 public class MainActivity extends AbstractWeexActivity {
@@ -41,23 +49,38 @@ public class MainActivity extends AbstractWeexActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-//        AndroidBug5497Workaround.assistActivity(this);
-        routerModel = (RouterModel) getIntent().getSerializableExtra(Constant.ROUTERPARAMS);
-        if (Constant.TABBAR.equals(routerModel.url)) {
-            initTabView();
-        } else {
-            layout_container = (FrameLayout) findViewById(R.id.layout_container);
-            initView();
-            renderPage();
-        }
-        initReloadReceiver();
 
-        statusBarHidden(BMWXApplication.getWXApplication().IS_FULL_SCREEN);
-        //七鱼客服
-        parseIntent();
-        ((BMWXApplication)getApplication()).setServiceEntranceActivity(getClass());
+//        String url = getIntent().getData().toString();
+//        if (url.startsWith("oneone2846")){
+//         getIntent().setData(Uri.parse(BMWXEnvironment.mPlatformConfig.getUrl().getJsServer()+"/dist/js/pages/auth/start.js"));
+//        }
+
+        super.onCreate(savedInstanceState);
+
+
+        if (!"true".equals(ManagerFactory.getManagerService(StorageManager.class).getData(this,"isload"))) {
+
+            setContentView(R.layout.activity_main);
+//        AndroidBug5497Workaround.assistActivity(this);
+            routerModel = (RouterModel) getIntent().getSerializableExtra(Constant.ROUTERPARAMS);
+
+            if (routerModel != null && Constant.TABBAR.equals(routerModel.url)) {
+                initTabView();
+            } else {
+                layout_container = (FrameLayout) findViewById(R.id.layout_container);
+                initView();
+                renderPage();
+            }
+            initReloadReceiver();
+
+            statusBarHidden(BMWXApplication.getWXApplication().IS_FULL_SCREEN);
+            //七鱼客服
+            parseIntent();
+            ((BMWXApplication) getApplication()).setServiceEntranceActivity(getClass());
+
+            ArrayList<Boolean> b = new ArrayList ();
+            ManagerFactory.getManagerService(StorageManager.class).setData(this,"isload","true");
+        }
     }
     @Override
     protected void onNewIntent(Intent intent) {
@@ -178,5 +201,6 @@ public class MainActivity extends AbstractWeexActivity {
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(BMWXEnvironment.mApplicationContext).unregisterReceiver(mReloadReceiver);
+        ManagerFactory.getManagerService(StorageManager.class).deleteData(this,"isload");
     }
 }
