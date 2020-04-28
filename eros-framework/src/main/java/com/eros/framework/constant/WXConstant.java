@@ -6,6 +6,8 @@ package com.eros.framework.constant;
 
 public class WXConstant {
 
+    public static boolean IsLoad = false;
+
     /**
      * -------------调试参数-----------------------
      **/

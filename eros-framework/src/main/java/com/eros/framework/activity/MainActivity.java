@@ -1,6 +1,7 @@
 package com.eros.framework.activity;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -19,10 +21,14 @@ import com.eros.framework.BMWXApplication;
 import com.eros.framework.BMWXEnvironment;
 import com.eros.framework.R;
 import com.eros.framework.constant.Constant;
+import com.eros.framework.constant.WXConstant;
 import com.eros.framework.event.TabbarEvent;
 import com.eros.framework.manager.ManagerFactory;
 import com.eros.framework.manager.StorageManager;
 import com.eros.framework.manager.impl.GlobalEventManager;
+import com.eros.framework.manager.impl.ParseManager;
+import com.eros.framework.manager.impl.VersionManager;
+import com.eros.framework.model.PlatformConfigBean;
 import com.eros.framework.model.RouterModel;
 import com.eros.framework.model.TabbarBadgeModule;
 import com.eros.framework.model.WeexEventBean;
@@ -51,6 +57,7 @@ public class MainActivity extends AbstractWeexActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("onCreate","xxxxxxxxxxxxxxxxxxxxxxx");
 
 //        String url = getIntent().getData().toString();
 //        if (url.startsWith("oneone2846")){
@@ -60,13 +67,35 @@ public class MainActivity extends AbstractWeexActivity {
         Intent intent = getIntent();
         Uri pageUri = intent.getData();
         if (pageUri.getScheme().startsWith(Constant.SCHEME) && pageUri.getQueryParameterNames().size()>0){
-           HashMap<String,String> params = new HashMap<>();
-           Iterator<String> n= pageUri.getQueryParameterNames().iterator();
 
-           while (n.hasNext()) {
-               String name = n.next();
-               params.put(name, pageUri.getQueryParameter(name));
-           }
+            HashMap<String,String> params = new HashMap<>();
+            Iterator<String> n= pageUri.getQueryParameterNames().iterator();
+
+            while (n.hasNext()) {
+                String name = n.next();
+                params.put(name, pageUri.getQueryParameter(name));
+            }
+
+            if (!WXConstant.IsLoad) {
+//                ManagerFactory.getManagerService(StorageManager.class).setData(this,Constant.AppInit,"true");
+//                StorageManager storageManager = ManagerFactory.getManagerService(StorageManager.class);
+//                String bar = storageManager.getData(this, Constant.SP.SP_TABBAR_JSON);
+//                if (!TextUtils.isEmpty(bar)) {
+//                    PlatformConfigBean.TabBar bean = ManagerFactory.getManagerService(ParseManager.class).parseObject
+//                            (bar, PlatformConfigBean.TabBar.class);
+//                    BMWXEnvironment.mPlatformConfig.setTabBar(bean);
+//                }
+//                ManagerFactory.getManagerService(VersionManager.class).prepareJsBundle(this);
+
+
+                ManagerFactory.getManagerService(StorageManager.class)
+                        .setData(this,Constant.SCHEME + "_startApp",ManagerFactory.getManagerService(ParseManager.class).toJsonString(params));
+                Intent sa = new Intent(Intent.ACTION_MAIN);
+                sa.addCategory(Intent.CATEGORY_LAUNCHER);
+                sa.setClassName(this, "org.shengyun.oneone.activity.SplashActivity");
+                startActivity(sa);
+                return;
+            }
 
            intent.putExtra(Constant.ROUTERPARAMS,new RouterModel(pageUri.getPath(),"PUSH",params,"",false,"Default",true));
         }
@@ -98,6 +127,7 @@ public class MainActivity extends AbstractWeexActivity {
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
         parseIntent();
+        Log.i("onNewIntent","xxxxxxxxxxxxxxxxxxxxxxx");
     }
     public static void consultService(final Context context, String uri, String title, ProductDetail productDetail) {
         // 启动聊天界面

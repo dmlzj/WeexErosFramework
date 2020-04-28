@@ -1,11 +1,14 @@
 package com.eros.framework.proxy;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.eros.framework.BMWXEnvironment;
 import com.eros.framework.constant.Constant;
+import com.eros.framework.constant.WXConstant;
 import com.eros.framework.constant.WXEventCenter;
 import com.eros.framework.manager.ManagerFactory;
 import com.eros.framework.manager.StorageManager;
@@ -65,6 +68,7 @@ public class SplashActivityProxy extends ActivityProxy {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 long prepareTime = versionManager.prepareJsBundle(activity);
                 mHandler.postDelayed(new Runnable() {
                     @Override
@@ -93,6 +97,7 @@ public class SplashActivityProxy extends ActivityProxy {
         eventBean.setContext(activity);
         dispatchEventManager.getBus().post(eventBean);
         activity.finish();
+        WXConstant.IsLoad = true;
     }
 
     private void initTabbar(Activity activity) {
