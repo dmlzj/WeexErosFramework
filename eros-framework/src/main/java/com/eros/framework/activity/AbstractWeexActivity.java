@@ -331,7 +331,7 @@ public class AbstractWeexActivity extends AppCompatActivity implements IWXRender
 //           }
 //        }
 
-        setPageUrl(pageUri.getPath());
+        setPageUrl(pageUri.toString());
     }
 
     public void setRouterParam(RouterModel param) {
