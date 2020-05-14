@@ -9,8 +9,9 @@ import android.widget.FrameLayout;
 
 import com.eros.framework.R;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
+
 import com.taobao.weex.dom.WXStyle;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXVContainer;
 
 /**
@@ -33,9 +34,14 @@ public class BMPop extends WXVContainer<FrameLayout> {
     private int mCurrentStatus = STATUS_HIDE;
     private boolean isAnimating;
 
-    public BMPop(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-        super(instance, dom, parent);
+    public BMPop(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
     }
+
+
+    //    public BMPop(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+//        super(instance, dom, parent);
+//    }
 
     @Override
     protected FrameLayout initComponentHostView(@NonNull Context context) {
@@ -45,9 +51,9 @@ public class BMPop extends WXVContainer<FrameLayout> {
 
 
     private void getAnimationHeight() {
-        WXDomObject wxDomObject = (WXDomObject) getDomObject();
-        if (wxDomObject == null) return;
-        WXStyle wxStyle = wxDomObject.getStyles();
+
+
+        WXStyle wxStyle = getStyles();
         Object object = wxStyle.get("height");
         if (object == null) return;
         mHeight = Integer.valueOf(object.toString());

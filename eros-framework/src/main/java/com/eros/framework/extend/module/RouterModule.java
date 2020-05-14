@@ -27,15 +27,20 @@ public class RouterModule extends WXModule {
 
     @JSMethod(uiThread = true)
     public void open(String params, JSCallback backCallback, JSCallback resultCallback) {
-        WeexEventBean eventBean = new WeexEventBean();
-        eventBean.setKey(WXEventCenter.EVENT_OPEN);
-        eventBean.setJsParams(params);
-        ArrayList<JSCallback> callBacks = new ArrayList<>();
-        callBacks.add(backCallback);
-        callBacks.add(resultCallback);
-        eventBean.setCallbacks(callBacks);
-        eventBean.setContext(mWXSDKInstance.getContext());
-        ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post(eventBean);
+        try{
+            WeexEventBean eventBean = new WeexEventBean();
+            eventBean.setKey(WXEventCenter.EVENT_OPEN);
+            eventBean.setJsParams(params);
+            ArrayList<JSCallback> callBacks = new ArrayList<>();
+            callBacks.add(backCallback);
+            callBacks.add(resultCallback);
+            eventBean.setCallbacks(callBacks);
+            eventBean.setContext(mWXSDKInstance.getContext());
+            ManagerFactory.getManagerService(DispatchEventManager.class).getBus().post(eventBean);
+        }catch (Exception e){
+          e.printStackTrace();
+        }
+
     }
 
 

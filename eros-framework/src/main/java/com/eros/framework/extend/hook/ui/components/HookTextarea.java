@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import com.eros.framework.extend.hook.HookConstants;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
+
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.Textarea;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -24,12 +25,16 @@ import java.lang.reflect.Field;
 public class HookTextarea extends Textarea {
     private String TAG = getClass().getName();
 
-    public HookTextarea(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean
-            isLazy) {
-        super(instance, dom, parent, isLazy);
-        Log.e(TAG, TAG + "init");
-    }
+//    public HookTextarea(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean
+//            isLazy) {
+//        super(instance, dom, parent, isLazy);
+//        Log.e(TAG, TAG + "init");
+//    }
 
+
+    public HookTextarea(WXSDKInstance instance, WXVContainer parent, boolean isLazy, BasicComponentData basicComponentData) {
+        super(instance, parent, isLazy, basicComponentData);
+    }
 
     //benmu.org
     @WXComponentProp(name = HookConstants.NAME.TINTCOLOR)

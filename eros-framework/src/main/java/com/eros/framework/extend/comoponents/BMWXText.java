@@ -16,11 +16,10 @@ import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXAttr;
-import com.taobao.weex.dom.WXDomHandler;
-import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.dom.WXDomTask;
+
 import com.taobao.weex.dom.WXStyle;
 import com.taobao.weex.ui.ComponentCreator;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXText;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -33,12 +32,19 @@ import java.util.Map;
  * Created by Carry on 17/3/27.
  */
 public class BMWXText extends WXComponent<BMWXTextView> {
-    public BMWXText(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-        super(instance, dom, parent);
+
+
+    public BMWXText(WXSDKInstance instance, WXVContainer parent, int type, BasicComponentData basicComponentData) {
+        super(instance, parent, type, basicComponentData);
         registerBroadCast();
         initFontSize();
     }
 
+    public BMWXText(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
+        registerBroadCast();
+        initFontSize();
+    }
 
     public static final int sDEFAULT_SIZE = 32;
     private DefaultBroadcastReceiver mReceiver;
@@ -51,18 +57,12 @@ public class BMWXText extends WXComponent<BMWXTextView> {
 
     public static class Creator implements ComponentCreator {
 
-        public WXComponent createInstance(WXSDKInstance instance, WXDomObject node, WXVContainer
-                parent) throws IllegalAccessException, InvocationTargetException,
+        public WXComponent createInstance(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) throws IllegalAccessException, InvocationTargetException,
                 InstantiationException {
-            return new WXText(instance, node, parent);
+            return new WXText(instance, parent, basicComponentData);
         }
     }
 
-    @Deprecated
-    public BMWXText(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
-            instanceId, boolean isLazy) {
-        this(instance, dom, parent);
-    }
 
 
     @Override
@@ -94,7 +94,7 @@ public class BMWXText extends WXComponent<BMWXTextView> {
     public void refreshData(WXComponent component) {
         super.refreshData(component);
         if (component instanceof WXText) {
-            updateExtra(component.getDomObject().getExtra());
+            updateExtra(component.getExtra());
         }
     }
 
@@ -119,7 +119,7 @@ public class BMWXText extends WXComponent<BMWXTextView> {
     }
 
     /**
-     * Flush view no matter what height and width the {@link WXDomObject} specifies.
+     * Flush view no matter what height and width the {@link } specifies.
      *
      * @param extra must be a {@link Layout} object, otherwise, nothing will happen.
      */
@@ -164,15 +164,15 @@ public class BMWXText extends WXComponent<BMWXTextView> {
 
         WXStyle styles = null;
         WXAttr attrs = null;
-        if (getDomObject() != null) {
-            styles = getDomObject().getStyles();
-            attrs = getDomObject().getAttrs();
+
+            styles =  getStyles();
+            attrs = getAttrs();
             if ((styles != null && "iconfont".equals(styles.get("fontFamily"))) || (attrs != null
                     && attrs.get("changeFont") != null && !Boolean.valueOf((String) attrs.get
                     ("changeFont")))) {
                 return;
             }
-        }
+
 
         float scale = 0;
         //获取fontScale字段
@@ -196,8 +196,8 @@ public class BMWXText extends WXComponent<BMWXTextView> {
             float change = getEnlarge(mChangeFontSize);
             scale = change / current * mCurrentScale;
         }
-        if (getDomObject() != null && getDomObject().getStyles() != null) {
-            WXStyle wxStyle = getDomObject().getStyles();
+        if (getStyles() != null) {
+            WXStyle wxStyle = getStyles();
             Object object = wxStyle.get("fontSize");
             if (object instanceof Integer) {
                 int fontSize = (int) object;
@@ -267,18 +267,19 @@ public class BMWXText extends WXComponent<BMWXTextView> {
 
 
     public void updateStyle(Map<String,Object> styles){
-        Message message = Message.obtain();
-        WXDomTask task = new WXDomTask();
-        task.instanceId = getInstanceId();
-        task.args = new ArrayList<>();
-
-        JSONObject styleJson = new JSONObject(styles);
-        task.args.add(getRef());
-        task.args.add(styleJson);
-        task.args.add(false);//flag pesudo
-        message.obj = task;
-        message.what = WXDomHandler.MsgType.WX_DOM_UPDATE_STYLE;
-        WXSDKManager.getInstance().getWXDomManager().sendMessage(message);
+        super.updateStyle(styles,true);
+//        Message message = Message.obtain();
+//        WXDomTask task = new WXDomTask();
+//        task.instanceId = getInstanceId();
+//        task.args = new ArrayList<>();
+//
+//        JSONObject styleJson = new JSONObject(styles);
+//        task.args.add(getRef());
+//        task.args.add(styleJson);
+//        task.args.add(false);//flag pesudo
+//        message.obj = task;
+//        message.what = WXDomHandler.MsgType.WX_DOM_UPDATE_STYLE;
+//        WXSDKManager.getInstance().getWXDomManager().sendMessage(message);
     }
 
 }

@@ -12,7 +12,8 @@ import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.Component;
 import com.taobao.weex.adapter.URIAdapter;
 import com.taobao.weex.common.Constants;
-import com.taobao.weex.dom.WXDomObject;
+
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -36,13 +37,24 @@ public class HookWeb extends WXComponent {
     public static final String RELOAD = "reload";
     protected IWebView mWebView;
 
-    @Deprecated
-    public HookWeb(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
-        this(instance, dom, parent, isLazy);
+//    @Deprecated
+//    public HookWeb(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
+//        this(instance, dom, parent, isLazy);
+//    }
+//
+//    public HookWeb(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
+//        super(instance, dom, parent, isLazy);
+//        createWebView();
+//    }
+
+
+    public HookWeb(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
+        createWebView();
     }
 
-    public HookWeb(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
-        super(instance, dom, parent, isLazy);
+    public HookWeb(WXSDKInstance instance, WXVContainer parent, int type, BasicComponentData basicComponentData) {
+        super(instance, parent, type, basicComponentData);
         createWebView();
     }
 
@@ -61,7 +73,7 @@ public class HookWeb extends WXComponent {
         mWebView.setOnPageListener(new IWebView.OnPageListener() {
             @Override
             public void onReceivedTitle(String title) {
-                if (getDomObject().getEvents().contains(Constants.Event.RECEIVEDTITLE)) {
+                if (getEvents().contains(Constants.Event.RECEIVEDTITLE)) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("title", title);
                     fireEvent(Constants.Event.RECEIVEDTITLE, params);
@@ -70,7 +82,7 @@ public class HookWeb extends WXComponent {
 
             @Override
             public void onPageStart(String url) {
-                if (getDomObject().getEvents().contains(Constants.Event.PAGESTART)) {
+                if (getEvents().contains(Constants.Event.PAGESTART)) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("url", url);
                     fireEvent(Constants.Event.PAGESTART, params);
@@ -79,7 +91,7 @@ public class HookWeb extends WXComponent {
 
             @Override
             public void onPageFinish(String url, boolean canGoBack, boolean canGoForward) {
-                if (getDomObject().getEvents().contains(Constants.Event.PAGEFINISH)) {
+                if (getEvents().contains(Constants.Event.PAGEFINISH)) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("url", url);
                     params.put("canGoBack", canGoBack);
@@ -156,7 +168,7 @@ public class HookWeb extends WXComponent {
     }
 
     private void fireEvent(String type, Object message) {
-        if (getDomObject().getEvents().contains(Constants.Event.ERROR)) {
+        if (getEvents().contains(Constants.Event.ERROR)) {
             Map<String, Object> params = new HashMap<>();
             params.put("type", type);
             params.put("errorMsg", message);

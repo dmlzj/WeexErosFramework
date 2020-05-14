@@ -39,8 +39,7 @@ import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.common.WXException;
-import com.taobao.weex.dom.RichTextDomObject;
-import com.taobao.weex.dom.WXTextDomObject;
+
 import com.taobao.weex.ui.SimpleComponentHolder;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.ui.component.WXWeb;
@@ -167,9 +166,9 @@ public class BMWXEngine {
     }
 
     private static void registerCustomDomObject() throws WXException {
-        WXSDKEngine.registerDomObject("bmtext", WXTextDomObject.class);
-        WXSDKEngine.registerDomObject("bmspan", WXTextDomObject.class);
-        WXSDKEngine.registerDomObject("bmrichtext", RichTextDomObject.class);
+//        WXSDKEngine.registerDomObject("bmtext", WXTextDomObject.class);
+//        WXSDKEngine.registerDomObject("bmspan", WXTextDomObject.class);
+//        WXSDKEngine.registerDomObject("bmrichtext", RichTextDomObject.class);
     }
 
 

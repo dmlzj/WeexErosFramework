@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.eros.framework.extend.hook.HookConstants;
+import com.eros.framework.extend.hook.ui.view.HookBounceRecyclerView;
 import com.eros.framework.extend.hook.ui.view.HookBounceScrollerView;
 import com.eros.framework.extend.hook.ui.view.HookWXHorizontalScrollView;
 import com.eros.framework.extend.hook.ui.view.refresh.bmrefresh.BMBaseRefresh;
@@ -26,8 +27,9 @@ import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.common.ICheckBindingScroller;
 import com.taobao.weex.common.OnWXScrollListener;
 import com.taobao.weex.common.WXThread;
-import com.taobao.weex.dom.WXDomObject;
+
 import com.taobao.weex.ui.ComponentCreator;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.AppearanceHelper;
 import com.taobao.weex.ui.component.Scrollable;
 import com.taobao.weex.ui.component.WXBaseRefresh;
@@ -79,13 +81,30 @@ public class HookWxScroller extends WXScroller implements WXScrollView.WXScrollV
     private boolean isScrollable;
 
     /** @deprecated */
-    @Deprecated
-    public HookWxScroller(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
-        this(instance, dom, parent);
-    }
+//    @Deprecated
+//    public HookWxScroller(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
+//        this(instance, dom, parent);
+//    }
+//
+//    public HookWxScroller(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
+//        super(instance, node, parent);
+//        this.mOrientation = 1;
+//        this.mRefreshs = new ArrayList();
+//        this.mChildrenLayoutOffset = 0;
+//        this.mForceLoadmoreNextTime = false;
+//        this.mOffsetAccuracy = 10;
+//        this.mLastReport = new Point(-1, -1);
+//        this.mHasAddScrollEvent = false;
+//        this.mAppearanceComponents = new HashMap();
+//        this.mStickyMap = new HashMap();
+//        this.mContentHeight = 0;
+//        this.handler = new Handler();
+//        this.isScrollable = true;
+//        this.stickyHelper = new WXStickyHelper(this);
+//    }
 
-    public HookWxScroller(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
-        super(instance, node, parent);
+    public HookWxScroller(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
         this.mOrientation = 1;
         this.mRefreshs = new ArrayList();
         this.mChildrenLayoutOffset = 0;
@@ -240,8 +259,8 @@ public class HookWxScroller extends WXScroller implements WXScrollView.WXScrollV
 
     protected ViewGroup initComponentHostView(@NonNull Context context) {
         String scroll;
-        if(this.getDomObject() != null && !this.getDomObject().getAttrs().isEmpty()) {
-            scroll = this.getDomObject().getAttrs().getScrollDirection();
+        if( !getAttrs().isEmpty()) {
+            scroll = getAttrs().getScrollDirection();
         } else {
             scroll = "vertical";
         }
@@ -269,7 +288,7 @@ public class HookWxScroller extends WXScroller implements WXScrollView.WXScrollV
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-1, -1);
             innerView.addView(this.mRealView, layoutParams);
             innerView.setVerticalScrollBarEnabled(true);
-            innerView.setNestedScrollingEnabled(WXUtils.getBoolean(this.getDomObject().getAttrs().get("nestedScrollingEnabled"), Boolean.valueOf(true)).booleanValue());
+            innerView.setNestedScrollingEnabled(WXUtils.getBoolean(getAttrs().get("nestedScrollingEnabled"), Boolean.valueOf(true)).booleanValue());
             innerView.addScrollViewListener(new WXScrollView.WXScrollViewListener() {
                 public void onScrollChanged(WXScrollView scrollView, int x, int y, int oldx, int oldy) {
                 }
@@ -515,7 +534,7 @@ public class HookWxScroller extends WXScroller implements WXScrollView.WXScrollV
 
     protected void onLoadMore(WXScrollView scrollView, int x, int y) {
         try {
-            String offset = this.getDomObject().getAttrs().getLoadMoreOffset();
+            String offset =  getAttrs().getLoadMoreOffset();
             if(TextUtils.isEmpty(offset)) {
                 return;
             }
@@ -558,8 +577,8 @@ public class HookWxScroller extends WXScroller implements WXScrollView.WXScrollV
         public Creator() {
         }
 
-        public WXComponent createInstance(WXSDKInstance instance, WXDomObject node, WXVContainer parent) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-            return new HookWxScroller(instance, node, parent);
+        public WXComponent createInstance(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+            return new HookWxScroller(instance, parent, basicComponentData);
         }
     }
 

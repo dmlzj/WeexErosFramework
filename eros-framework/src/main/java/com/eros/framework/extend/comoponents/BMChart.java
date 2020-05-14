@@ -21,10 +21,11 @@ import com.eros.framework.utils.AssetsUtil;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.common.Constants;
-import com.taobao.weex.dom.ImmutableDomObject;
+
 import com.taobao.weex.dom.WXAttr;
-import com.taobao.weex.dom.WXDomObject;
+
 import com.taobao.weex.dom.WXStyle;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -49,24 +50,35 @@ public class BMChart extends WXComponent implements IWebView.OnPageListener {
     private String mUrl;
     private static final String INSIDE_URL = "file:///android_asset/bm-chart.html";
 
-    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, int type) {
-        super(instance, dom, parent, type);
+//    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, int type) {
+////        super(instance, dom, parent, type);
+////        init();
+////    }
+////
+////    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
+////            instanceId, boolean isLazy) {
+////        super(instance, dom, parent, instanceId, isLazy);
+////        init();
+////    }
+////
+////    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
+////        super(instance, dom, parent, isLazy);
+////        init();
+////    }
+////
+////    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+////        super(instance, dom, parent);
+////        init();
+////    }
+
+
+    public BMChart(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
         init();
     }
 
-    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
-            instanceId, boolean isLazy) {
-        super(instance, dom, parent, instanceId, isLazy);
-        init();
-    }
-
-    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
-        super(instance, dom, parent, isLazy);
-        init();
-    }
-
-    public BMChart(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-        super(instance, dom, parent);
+    public BMChart(WXSDKInstance instance, WXVContainer parent, int type, BasicComponentData basicComponentData) {
+        super(instance, parent, type, basicComponentData);
         init();
     }
 
@@ -100,10 +112,10 @@ public class BMChart extends WXComponent implements IWebView.OnPageListener {
         WebSettings settings = mWeb.getSettings();
         settings.setJavaScriptEnabled(true);
         mWebView.setOnPageListener(this);
-        ImmutableDomObject domObject = getDomObject();
+
         String url = null;
-        if (domObject != null && domObject.getAttrs() != null) {
-            url = WXUtils.getString(domObject.getAttrs().get(Constants.Name.SRC), null);
+        if (getAttrs() != null) {
+            url = WXUtils.getString(getAttrs().get(Constants.Name.SRC), null);
         }
         mUrl = url;
         mWeb.loadUrl(getUrl(url));

@@ -10,7 +10,8 @@ import com.bumptech.glide.Glide;
 import com.eros.framework.extend.comoponents.view.VideoView;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
-import com.taobao.weex.dom.WXDomObject;
+
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -26,8 +27,13 @@ public class SYVideo extends WXVContainer<VideoView> {
 
     private VideoView videoView;
     private JzvdStd jzvdStd;
-    public SYVideo(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-        super(instance, dom, parent);
+//    public SYVideo(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+//        super(instance, dom, parent);
+//    }
+
+
+    public SYVideo(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
     }
 
     @Override

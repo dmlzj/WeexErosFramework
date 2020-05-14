@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextUtils;
+import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,16 +22,14 @@ import com.eros.framework.utils.BMRichUtil;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
-import com.taobao.weex.dom.ImmutableDomObject;
-import com.taobao.weex.dom.RichTextDomObject;
-import com.taobao.weex.dom.WXDomHandler;
-import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.dom.WXDomTask;
+
 import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.dom.WXStyle;
-import com.taobao.weex.dom.WXTextDomObject;
+
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
+import com.taobao.weex.ui.component.WXText;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXUtils;
 import java.util.ArrayList;
@@ -45,14 +44,19 @@ public class BMRich extends WXVContainer<LinearLayout> {
 
     private BMWXTextView richText;
     private SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-    private List<RichTextDomObject.BMRichSpan> mSpans = new ArrayList<>();
+    private List<BMRichSpan> mSpans = new ArrayList<>();
     private StringBuilder mText = new StringBuilder();
     private int mSubCount;
     private MockMovementMeltedTouchListener mTouchListenner;
     private List<WXComponent> mBMSpans = new ArrayList<>();
 
-    public BMRich(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
-        super(instance, node, parent);
+//    public BMRich(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
+//        super(instance, node, parent);
+//    }
+
+
+    public BMRich(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
     }
 
     @Override
@@ -71,15 +75,15 @@ public class BMRich extends WXVContainer<LinearLayout> {
     }
 
 
-    public void receiveBubbleEvent(WXDomObject wxDomObject) {
+    public void receiveBubbleEvent(WXComponent wxDomObject) {
         if (wxDomObject == null) return;
         organizeChild(wxDomObject);
     }
 
 
-    private void organizeChild(WXDomObject object) {
-        if (object instanceof WXTextDomObject) {
-            WXTextDomObject textDomObject = (WXTextDomObject) object;
+    private void organizeChild(WXComponent object) {
+
+            WXText textDomObject = (WXText) object;
             BMRichUtil util = new BMRichUtil();
             Spanned test = util.createSpan(textDomObject.getAttrs(), textDomObject.getStyles
                     ());
@@ -88,7 +92,7 @@ public class BMRich extends WXVContainer<LinearLayout> {
             Object[] spans = spannableString.getSpans(0, spannableString.length()
                     , Object.class);
             for (Object span : spans) {
-                mSpans.add(new RichTextDomObject.BMRichSpan(span, mText.length(),
+                mSpans.add(new BMRichSpan(span, mText.length(),
                         spannableString.length()
                                 + mText.length()
                 ));
@@ -100,7 +104,7 @@ public class BMRich extends WXVContainer<LinearLayout> {
             }
             mText.append(spannableString.toString());
             spannableStringBuilder.append(spannableString);
-        }
+
 
         update();
     }
@@ -108,9 +112,9 @@ public class BMRich extends WXVContainer<LinearLayout> {
 
     private void aggregateChild(WXComponent child) {
         if (child != null) {
-            ImmutableDomObject domObject = child.getDomObject();
-            if (domObject instanceof WXTextDomObject) {
-                WXTextDomObject textDomObject = (WXTextDomObject) domObject;
+
+            if (child instanceof WXText) {
+                WXText textDomObject = (WXText) child;
 //                Layout extra = textDomObject.getExtra();
 //                Log.e("extra", "extra>>>>>>" + extra + "count>>>>" + mSubCount);
                 BMRichUtil util = new BMRichUtil();
@@ -123,13 +127,13 @@ public class BMRich extends WXVContainer<LinearLayout> {
                 Object[] spans = spannableString.getSpans(0, spannableString.length()
                         , Object.class);
                 for (Object span : spans) {
-                    mSpans.add(new RichTextDomObject.BMRichSpan(span, mText.length(),
+                    mSpans.add(new BMRichSpan(span, mText.length(),
                             spannableString.length()
                                     + mText.length()
                     ));
                 }
                 //设置span的事件
-                WXEvent events = domObject.getEvents();
+                WXEvent events = child.getEvents();
                 for (String event : events) {
                     appendChildEvent(event, spannableString, textDomObject);
                 }
@@ -147,7 +151,7 @@ public class BMRich extends WXVContainer<LinearLayout> {
     }
 
     private void appendChildEvent(String event, SpannableString spannableString, final
-    WXTextDomObject
+    WXText
             textDomObject) {
         if (TextUtils.isEmpty(event)) {
             return;
@@ -163,7 +167,7 @@ public class BMRich extends WXVContainer<LinearLayout> {
                 }
             };
             BMSpan.BMRichClickSpan clickable = new BMSpan.BMRichClickSpan(l);
-            mSpans.add(new RichTextDomObject.BMRichSpan(clickable, mText.length(),
+            mSpans.add(new BMRichSpan(clickable, mText.length(),
                     spannableString.length()
                             + mText.length()));
             if (mTouchListenner == null) {
@@ -181,7 +185,7 @@ public class BMRich extends WXVContainer<LinearLayout> {
 
 
     private void update() {
-        WXStyle styles = getDomObject().getStyles();
+        WXStyle styles = getStyles();
         if (styles == null) {
             styles = new WXStyle();
         }
@@ -241,7 +245,7 @@ public class BMRich extends WXVContainer<LinearLayout> {
     }
 
 
-    public List<RichTextDomObject.BMRichSpan> getSpans() {
+    public List<BMRichSpan> getSpans() {
         return mSpans;
     }
 
@@ -254,17 +258,63 @@ public class BMRich extends WXVContainer<LinearLayout> {
 
 
     public void updateStyle(Map<String,Object> styles){
-        Message message = Message.obtain();
-        WXDomTask task = new WXDomTask();
-        task.instanceId = getInstanceId();
-        task.args = new ArrayList<>();
+//        Message message = Message.obtain();
+//        WXDomTask task = new WXDomTask();
+//        task.instanceId = getInstanceId();
+//        task.args = new ArrayList<>();
+//
+//        JSONObject styleJson = new JSONObject(styles);
+//        task.args.add(getRef());
+//        task.args.add(styleJson);
+//        task.args.add(false);//flag pesudo
+//        message.obj = task;
+//        message.what = WXDomHandler.MsgType.WX_DOM_UPDATE_STYLE;
+//        WXSDKManager.getInstance().getWXDomManager().sendMessage(message);
+        super.updateStyle(styles,true);
+    }
 
-        JSONObject styleJson = new JSONObject(styles);
-        task.args.add(getRef());
-        task.args.add(styleJson);
-        task.args.add(false);//flag pesudo
-        message.obj = task;
-        message.what = WXDomHandler.MsgType.WX_DOM_UPDATE_STYLE;
-        WXSDKManager.getInstance().getWXDomManager().sendMessage(message);
+    public static class BMRichSpan {
+        private Object span;
+        private int start;
+        private int end;
+
+        public BMRichSpan(Object span, int start, int end) {
+            this.span = span;
+            this.start = start;
+            this.end = end;
+        }
+
+        public Object getSpan() {
+            return span;
+        }
+
+        public void setSpan(CharacterStyle span) {
+            this.span = span;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public void setStart(int start) {
+            this.start = start;
+        }
+
+        public int getEnd() {
+            return end;
+        }
+
+        public void setEnd(int end) {
+            this.end = end;
+        }
+
+        @Override
+        public String toString() {
+            return "BMRichSpan{" +
+                    "span=" + span +
+                    ", start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
     }
 }

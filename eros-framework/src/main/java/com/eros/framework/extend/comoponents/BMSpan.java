@@ -7,7 +7,8 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
+
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -22,28 +23,36 @@ import cn.jzvd.JzvdStd;
 public class BMSpan extends WXComponent<View> {
     private Set<String> mAppendEvents = new HashSet<>();
 
-    public BMSpan(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
-            instanceId, boolean isLazy) {
-        super(instance, dom, parent, instanceId, isLazy);
+//    public BMSpan(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
+//            instanceId, boolean isLazy) {
+//        super(instance, dom, parent, instanceId, isLazy);
+//    }
+//
+//    public BMSpan(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
+//        super(instance, dom, parent, isLazy);
+//    }
+//
+//    public BMSpan(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+//        super(instance, dom, parent);
+//        postBubbleEvent(parent, dom);
+//    }
+
+
+    public BMSpan(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
     }
 
-    public BMSpan(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
-        super(instance, dom, parent, isLazy);
+    public BMSpan(WXSDKInstance instance, WXVContainer parent, int type, BasicComponentData basicComponentData) {
+        super(instance, parent, type, basicComponentData);
     }
 
-    public BMSpan(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-        super(instance, dom, parent);
-        postBubbleEvent(parent, dom);
-    }
-
-
-    public void postBubbleEvent(WXComponent parent, WXDomObject object) {
+    public void postBubbleEvent(WXComponent parent) {
         if (parent == null) return;
         if (parent instanceof BMRich) {
             BMRich bmRichText = (BMRich) parent;
-            bmRichText.receiveBubbleEvent(object);
+            bmRichText.receiveBubbleEvent(parent);
         } else {
-            postBubbleEvent(parent.getParent(), object);
+            postBubbleEvent(parent.getParent());
         }
     }
 

@@ -50,7 +50,7 @@ dependencies {
     compile 'com.lzy.widget:imagepicker:0.6.1'
     compile 'com.journeyapps:zxing-android-embedded:3.4.0'
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
     //bs patch
     compile 'me.ele:bspatch:1.0.6'
     //weex analyzer

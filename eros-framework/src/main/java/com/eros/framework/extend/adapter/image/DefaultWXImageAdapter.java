@@ -196,7 +196,7 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.taobao.weex.adapter.IWXImgLoaderAdapter;
 import com.taobao.weex.common.WXImageStrategy;
-import com.taobao.weex.dom.ImmutableDomObject;
+
 import com.taobao.weex.dom.WXImageQuality;
 
 import java.security.MessageDigest;
@@ -308,12 +308,10 @@ public class DefaultWXImageAdapter implements IWXImgLoaderAdapter {
 
     private void handleError(HookWXImageView imageView) {
         HookImage component = imageView.getComponent();
-        if (component == null) return;
-        ImmutableDomObject domObject = component.getDomObject();
-        if (domObject == null) return;
+
         Bitmap bitmap = getErrorBitmap(imageView.getContext());
-        if (domObject.getLayoutWidth() > 0 && domObject.getLayoutHeight() > 0) {
-            int target = Math.min((int) (domObject.getLayoutWidth()), (int) (domObject
+        if (component.getLayoutWidth() > 0 && component.getLayoutHeight() > 0) {
+            int target = Math.min((int) (component.getLayoutWidth()), (int) (component
                     .getLayoutHeight())) / 2;
             Bitmap zoomBitmap = ImageUtil.zoomImage(bitmap, target, target);
             if (zoomBitmap != null) {

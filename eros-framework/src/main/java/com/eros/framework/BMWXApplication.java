@@ -30,6 +30,7 @@ import com.qiyukf.unicorn.api.StatusBarNotificationConfig;
 import com.qiyukf.unicorn.api.Unicorn;
 import com.qiyukf.unicorn.api.UnicornImageLoader;
 import com.qiyukf.unicorn.api.YSFOptions;
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 
 import java.io.BufferedReader;
@@ -200,6 +201,8 @@ public class BMWXApplication extends Application {
 
 
     private void initWeex() {
+        //zjr
+        WXEnvironment.sApplication=this;
         BMWXEngine.initialize(this, new BMInitConfig.Builder().isActiceInterceptor(Constant
                 .INTERCEPTOR_ACTIVE).build());
 

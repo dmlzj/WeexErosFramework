@@ -14,11 +14,10 @@ import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXAttr;
-import com.taobao.weex.dom.WXDomHandler;
-import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.dom.WXDomTask;
+
 import com.taobao.weex.dom.WXStyle;
 import com.taobao.weex.ui.ComponentCreator;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXText;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -34,26 +33,30 @@ import java.util.Map;
 public class HookWXText extends WXText {
     private String TAG = getClass().getName();
 
-    public HookWXText(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
-            instanceId, boolean isLazy) {
-        super(instance, dom, parent, instanceId, isLazy);
-        Log.e(TAG, "HookWXText init");
+//    public HookWXText(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String
+//            instanceId, boolean isLazy) {
+//        super(instance, dom, parent, instanceId, isLazy);
+//        Log.e(TAG, "HookWXText init");
+//        initFontSize();
+//    }
+//
+//    public HookWXText(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
+//        super(instance, node, parent);
+//        Log.e(TAG, "HookWXText init");
+//        initFontSize();
+//    }
+
+
+    public HookWXText(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
         initFontSize();
     }
-
-    public HookWXText(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
-        super(instance, node, parent);
-        Log.e(TAG, "HookWXText init");
-        initFontSize();
-    }
-
 
     public static class Creator implements ComponentCreator {
 
-        public WXComponent createInstance(WXSDKInstance instance, WXDomObject node, WXVContainer
-                parent) throws IllegalAccessException, InvocationTargetException,
+        public WXComponent createInstance(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) throws IllegalAccessException, InvocationTargetException,
                 InstantiationException {
-            return new HookWXText(instance, node, parent);
+            return new HookWXText(instance, parent, basicComponentData);
         }
     }
 
@@ -79,9 +82,9 @@ public class HookWXText extends WXText {
 
 
     private void updateFontSize() {
-        if (getDomObject() != null && getDomObject().getStyles().get(Constants.Name.FONT_SIZE) ==
+        if (  getStyles().get(Constants.Name.FONT_SIZE) ==
                 null) {
-            WXStyle s = getDomObject().getStyles();
+            WXStyle s = getStyles();
             s.put(Constants.Name.FONT_SIZE, 30);
             updateStyle(s);
             return;
@@ -91,15 +94,15 @@ public class HookWXText extends WXText {
         }
         WXStyle styles = null;
         WXAttr attrs = null;
-        if (getDomObject() != null) {
-            styles = getDomObject().getStyles();
-            attrs = getDomObject().getAttrs();
-            if ((styles != null && "iconfont".equals(styles.get("fontFamily"))) || (attrs != null
-                    && attrs.get("changeFont") != null && !Boolean.valueOf((String) attrs.get
-                    ("changeFont")))) {
-                return;
-            }
+
+        styles = getStyles();
+        attrs = getAttrs();
+        if ((styles != null && "iconfont".equals(styles.get("fontFamily"))) || (attrs != null
+                && attrs.get("changeFont") != null && !Boolean.valueOf((String) attrs.get
+                ("changeFont")))) {
+            return;
         }
+
 
         float scale = 0;
         //获取fontScale字段
@@ -118,13 +121,13 @@ public class HookWXText extends WXText {
             scale = change / current;
         }
         //根据全局字体配置设置字体大小
-        if (!(scale > 0)) {
+
             float current = getEnlarge(mCurrentFontSize);
             float change = getEnlarge(mChangeFontSize);
             scale = change / current * mCurrentScale;
-        }
-        if (getDomObject() != null && getDomObject().getStyles() != null) {
-            WXStyle wxStyle = getDomObject().getStyles();
+
+        if (getStyles() != null) {
+            WXStyle wxStyle = getStyles();
             Object object = wxStyle.get("fontSize");
             if (object instanceof Integer) {
                 int fontSize = (int) object;
@@ -151,18 +154,19 @@ public class HookWXText extends WXText {
 
 
     public void updateStyle(Map<String,Object> styles){
-        Message message = Message.obtain();
-        WXDomTask task = new WXDomTask();
-        task.instanceId = getInstanceId();
-        task.args = new ArrayList<>();
-
-        JSONObject styleJson = new JSONObject(styles);
-        task.args.add(getRef());
-        task.args.add(styleJson);
-        task.args.add(false);//flag pesudo
-        message.obj = task;
-        message.what = WXDomHandler.MsgType.WX_DOM_UPDATE_STYLE;
-        WXSDKManager.getInstance().getWXDomManager().sendMessage(message);
+//        Message message = Message.obtain();
+//        WXDomTask task = new WXDomTask();
+//        task.instanceId = getInstanceId();
+//        task.args = new ArrayList<>();
+//
+//        JSONObject styleJson = new JSONObject(styles);
+//        task.args.add(getRef());
+//        task.args.add(styleJson);
+//        task.args.add(false);//flag pesudo
+//        message.obj = task;
+//        message.what = WXDomHandler.MsgType.WX_DOM_UPDATE_STYLE;
+//        WXSDKManager.getInstance().getWXDomManager().sendMessage(message);
+        super.updateStyle(styles,true);
     }
 
     private float getEnlarge(String fontsize) {

@@ -76,6 +76,7 @@ public class DefaultRouterAdapter {
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.putExtra(Constant.ROUTERPARAMS, routerModel);
+
         intent.setData(pathUri);
         intent.addCategory(bmpageCategory);
         activity.startActivity(intent);
