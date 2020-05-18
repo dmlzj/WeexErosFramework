@@ -72,7 +72,7 @@ public class LoadingLoadMore extends BaseLoadMore {
             animation.start();
         }
         if (mWeakReference != null && mWeakReference.get() != null) {
-            mWeakReference.get().fireEvent(Constants.Event.LOADMORE);
+            mWeakReference.get().fireEvent(Constants.Event.ONLOADMORE);
         }
     }
 
